@@ -1,8 +1,7 @@
 package com.spring_boot_projects.RBAC.config;
 
 import com.spring_boot_projects.RBAC.entities.Role;
-import com.spring_boot_projects.RBAC.repository.UserRepository;
-import com.spring_boot_projects.RBAC.services.CustomUserDetailsService;
+import com.spring_boot_projects.RBAC.services.impl.CustomUserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,8 +29,7 @@ public class SecurityConfiguration {
 
     @Lazy
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserRepository userRepository;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsServiceImpl customUserDetailsService;
 
     @Autowired
     public void setJwtAuthenticationFilter(JwtAuthenticationFilter jwtAuthenticationFilter) {
@@ -60,16 +57,11 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customUserDetailsService);
+        provider.setUserDetailsService((UserDetailsService) customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
