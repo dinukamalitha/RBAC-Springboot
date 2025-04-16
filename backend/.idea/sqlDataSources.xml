@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="3d0c2ed5-9f25-427a-9806-3459462460c5" name="RBAC Mapping">
+      <data-sources db="0ebea11e-a38a-4dd2-bd6b-f611448925e1" />
+    </mapping>
+    <mapping uuid="41634225-e43e-432a-a143-a83ceffec017" name="postgres@localhost Mapping">
+      <data-sources db="6162fb26-1d72-4fad-b3f3-2642847dde30" />
+    </mapping>
+  </component>
+</project>
