@@ -4,7 +4,6 @@ import com.spring_boot_projects.RBAC.entities.Role;
 import com.spring_boot_projects.RBAC.entities.User;
 import com.spring_boot_projects.RBAC.repository.UserRepository;
 import com.spring_boot_projects.RBAC.services.AdminService;
-//import com.spring_boot_projects.RBAC.services.EmailService;
 import com.spring_boot_projects.RBAC.services.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,12 +24,11 @@ public class AdminServiceImpl implements AdminService {
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setEmail(user.getEmail());
 
-        String inputRole = user.getRole().name().toUpperCase();
-
-        if (!inputRole.equals("STAFF") && !inputRole.equals("SALES")) {
+        Role role = Role.valueOf(user.getRole().name());
+        if (role != Role.STAFF && role != Role.SALES) {
             throw new IllegalArgumentException("Invalid Role");
         }
-        newUser.setRole(user.getRole());
+        newUser.setRole(role);
 
         // Send an email with the created user details
         String emailSubject = "Welcome to the platform!";

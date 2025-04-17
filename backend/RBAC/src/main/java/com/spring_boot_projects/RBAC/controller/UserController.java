@@ -5,10 +5,7 @@ import com.spring_boot_projects.RBAC.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,18 +21,20 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsers());
     }
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+    @PostMapping("/forgot-password/{email}")
+    public ResponseEntity<String> forgotPassword(@PathVariable String email) {
         return ResponseEntity.ok(userService.forgotPassword(email));
     }
 
-    @PostMapping("/verify")
-    public ResponseEntity<String> verify(@RequestParam String email, @RequestParam String otp) {
+    @PostMapping("/verify/{email}/{otp}")
+    public ResponseEntity<String> verify(@PathVariable String email, @PathVariable String otp) {
         return ResponseEntity.ok(userService.verifyOtp(email, otp));
     }
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword) {
-        return ResponseEntity.ok(userService.resetPassword(email, password, confirmPassword));
+    @PostMapping("/reset-password/{email}")
+    public ResponseEntity<String> resetPassword(@PathVariable String email, @RequestParam String password, @RequestParam String confirmPassword) {
+        String response = userService.resetPassword(email, password, confirmPassword);
+        return ResponseEntity.ok(response);
     }
+
 }

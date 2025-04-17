@@ -7,6 +7,7 @@ import com.spring_boot_projects.RBAC.repository.UserRepository;
 import com.spring_boot_projects.RBAC.repository.VerificationRepository;
 import com.spring_boot_projects.RBAC.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     public List<ViewRequest> getUsers(){
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 
         return users.stream().map(user -> {
             ViewRequest dto = new ViewRequest();
@@ -78,10 +79,13 @@ public class UserServiceImpl implements UserService {
         return "OTP sent successfully";
     }
 
-    public String verifyOtp(String email, String otp){
+    public String verifyOtp(String email, String otp) {
         Verification verification = verificationRepository.findByEmail(email);
+        if (verification == null) {
+            return "Verification record not found for the email";
+        }
 
-        if(!verification.getOtp().equals(otp)){
+        if (!verification.getOtp().equals(otp)) {
             return "OTP verification failed";
         }
 
@@ -89,14 +93,22 @@ public class UserServiceImpl implements UserService {
         return "OTP verified successfully";
     }
 
-    public String resetPassword(String email, String password, String confirmPassword){
+
+    public String resetPassword(String email, String password, String confirmPassword) {
         Optional<User> user = userRepository.findByEmail(email);
 
-        if (user.isPresent() && password.equals(confirmPassword)) {
-            user.get().setPassword(passwordEncoder.encode(password));
-            userRepository.save(user.get());
+        if (!user.isPresent()) {
+            return "User not found";
         }
+
+        if (!password.equals(confirmPassword)) {
+            return "Passwords do not match";
+        }
+
+        user.get().setPassword(passwordEncoder.encode(password));
+        userRepository.save(user.get());
 
         return "Password reset successfully";
     }
+
 }
