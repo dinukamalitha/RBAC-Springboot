@@ -73,7 +73,6 @@ const LoginForm = () => {
 
             {/* Right Section (Login Form) */}
             <div className="w-1/2 flex flex-col items-center justify-center">
-                <h3 className="text-4xl text-red font-bold mb-6">Welcome to X-Bus!</h3>
                 <div className="bg-white p-10 rounded-lg shadow-lg w-3/4">
                     <div className="flex items-center justify-center mb-6">
                         <h3 className="text-3xl font-bold">Login</h3>

@@ -10,5 +10,7 @@ export default [
     route("staffDashboard", "routes/staff/staffDashboard.tsx"),
     route("salesDashboard", "routes/sales/salesDashboard.tsx"),
     route("home", "routes/home.tsx"),
+    route("profile", "routes/profile.tsx"),
+    route("createAccounts", "routes/admin/createAccount.tsx"),
     route("page-not-found", "routes/notfound.tsx"),
 ] satisfies RouteConfig;
